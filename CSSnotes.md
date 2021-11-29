@@ -100,3 +100,4 @@ padding: 1em 2em 1em 2em
     box-shadow: 10px 2px
 }
 ```
+即表达水平向右10px，垂直向下2px
