@@ -1,5 +1,7 @@
 # CSS in Depth Notes
 
+[toc]
+
 ## Chapter 1
 
 ### 优先级理解
@@ -101,3 +103,60 @@ padding: 1em 2em 1em 2em
 }
 ```
 即表达水平向右10px，垂直向下2px
+
+## Chapter 2
+
+### em 与 rem
+
+在CSS中，1em等于当前元素的字号，即如果字号是14px，那么1em就是14px，2em则为28px
+
+对于em与当前元素字号的运算结果，其绝对值被称为`计算值Computed value`
+
+范例中
+``` html
+<span class="box box-small">Small</span>
+<span class="box box-large">Large</span>
+```
+可以通过`空格`给class里面定义多个内容实现编组与单独调整
+
+``` css
+.box{
+    padding: 1em;
+}
+
+.box-small {
+    font-size: 12px;
+}
+
+.box-large {
+    font-size: 18px;
+}
+```
+
+这样两个span内的1em就不同了
+
+#### em定义字号
+
+如果像`font-size=1.2em`这样定义字号，那么其em的参考系，将是它所继承的上一级元素的对应字号
+
+比如一个元素可以从`body`取得一个字号的值，那么它自己用`em`来定义的时候，参考值就是`body`的字号
+
+如果一个元素的`font-size`以`em`定义了，那么后面比如再设定padding的时候使用了`em`,padding的距离就会是 `font-size * em数 * em数`,即如果`body`的`font-size` 是16px, 那么这个元素的`font-size`就是`1.2 * 16px`,那么他的`padding`如果是`1.2em`,那么padding的值就是`1.2 * 16px * 1.2`
+
+如果使用值小于1的`em`连续继承，会造成字体逐层减小 `0.x * 0.x * 0.x ...`
+
+### rem定义字号
+
+`rem`的意思是root em，em参考值是相对于根元素的的值。无论在哪个位置使用rem，所取得的rem计算值都相同
+
+``` css
+:root {
+    font-size: 1em;
+}
+
+ul {
+    font-size: 0.8rem;
+}
+```
+root是一个伪类，等价于html selector。通常默认em对应的像素是16px。ul则直接通过root的font-size进行计算
+
