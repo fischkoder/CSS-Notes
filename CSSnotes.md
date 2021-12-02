@@ -160,3 +160,72 @@ ul {
 ```
 root是一个伪类，等价于html selector。通常默认em对应的像素是16px。ul则直接通过root的font-size进行计算
 
+## 附录 选择器 Selector
+
+### 基础选择器：
+
+`tagname` 类型或者标签选择器，直接匹配标签名
+`.class` 类选择器匹配标签属性中的class名称
+`#id` ID选择器，匹配标签属性中的id
+`*` 通用选择器，匹配所有元素
+
+### 组合器 Combinators：
+
+组合器是将多个基础选择器连接起来组成一个复杂的选择器
+例如：
+`.nav-menu li`选择器中，两个基础选择器之间的空格被称作后代选择器`descendant combinator` 
+空格的做法是后代与parent level应用同样的样式
+
+`子组合器 >` 匹配目标元素是某个元素的直接后代 样式仅应用于这个后代
+例如：`.parent > .child`
+`相邻兄弟组合器 +` 匹配目标是紧跟在一个元素后面的一个元素 样式会仅仅应用于这个某个元素后面紧挨着的第一个元素
+例如：`p + h2`
+`通用兄弟组合器 ~` 匹配所有跟随在一个元素后面的元素 样式会应用到一个元素后面的所有元素
+例如：`li.active ~ li`
+
+### 复合选择器 Compound Selectors
+指的是将多个选择器组合起来中间不采用任何组合器（空格 > + ~）进行连接
+
+复合选择器会将能匹配全部选择器的元素进行样式应用
+例如：
+`.dropdown.is-active` 能够选中 `<div class="dropdown is-active"> 但是无法选中<div class="dropdown">`
+
+### 伪类选择器 Psuedo Selectors
+伪类选择器用于选中处于特定状态的元素。这个状态可以是由于用户交互或者元素相对于其父级与兄弟元素的位置。伪类选择器始终以`:`开始，优先级等同于`.class`
+
+`:first-child` 匹配元素是其父级元素中的第一个子元素
+`:last-child` 匹配的元素是其父级元素中的最后一个子元素
+`:only-child` 匹配的元素是其父级元素中的唯一一个子元素，因此也没有兄弟元素
+`:nth-child(an+b)` 匹配的元素是兄弟元素间特定的位置，`a`与`b`是整数，n从0开始递增
+`:nth-last-child(an+b)` 同上，不过是从后往前的顺序
+`:first-of-type` 匹配具有相同标签类型的元素中的第一个元素
+`:last-of-type` 匹配具有相同标签类型的元素中的最后一个元素
+`:only-of-type` 匹配满足某个标签类型的唯一一个元素
+`:nth-of-type(an+b)` 原理类似`nth-child`但是是根据标签类型匹配
+`:nth-last-of-type(an+b)` 同上，但是顺序变为从后往前
+`:not(<selector>)`  匹配元素不是括号内选择器的元素。并且括号内只能是基础选择器，只能用于元素本身，无法用于排除祖先元素，也不允许包含多个选择器
+`:empty` 所匹配的元素必须没有子元素，如果元素包含空格就无法被选中
+`:focus` 匹配通过鼠标点击、触摸、tab而被选中获得焦点的元素
+`:hover` 匹配鼠标指针悬停在上方的元素
+`:root` 匹配文档根元素，对于html来说就是<html>
+`:disabled` 匹配已禁用的元素，包括`input`,`select`,`button`元素
+`:enabled` 匹配已启用的元素，既能够激活或者能够作为焦点的元素
+`:checked` 匹配已经被选定的checkboxes、radio buttons或者select box options 
+`:invalid` 根据输入类型的定义，匹配具有非法输入值的元素，例如`input`验证输入邮箱不正确时会被匹配
+`:valid` 匹配了具有合法值的元素
+`:required` 匹配设置了required属性的元素
+`:optional` 匹配没有设置required属性的元素
+
+### 伪元素选择器 Pseudo-element Selectors
+类似于伪类选择器，不同于选择特定状态的元素，伪元素选择器作用于文档中的一部分，并不会作用于某个特定的HTML元素。他们可能只作用于一个元素中的一部分，甚至会插入一些内容到html定义的范围之外。 伪元素选择器以`::`开始,其优先级与类型选择器`tagname`相等
+
+`::before` 创建一个伪元素，使其成为所匹配元素的第一个元素，该元素默认是inline element，可用于插入文字，图片或者其他形状。`内容`的属性被明确了才会让元素出现,`.menu::before`
+`::after` 创建一个伪元素，使其成为所匹配元素的最后一个元素，该元素默认是inline element，可用于插入文字，图片或者其他形状。`内容`的属性被明确了才会让元素出现,`.menu::after`
+`::first-letter` 用于匹配元素的的第一个文本字符的样式 `h2::first-letter`
+`::first-line` 用于指定匹配元素的第一行文本样式
+`::selection` 用于制定用户使用鼠标高粱选择的文本样式。 通常用于改变选中文本的`background-color`。其只有少数属性可用，包括`color`,`background-color`,`cursor`,`text-decoration`
+
+### 属性选择器
+
+
+
