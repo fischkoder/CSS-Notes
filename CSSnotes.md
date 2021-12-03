@@ -225,7 +225,15 @@ root是一个伪类，等价于html selector。通常默认em对应的像素是1
 `::first-line` 用于指定匹配元素的第一行文本样式
 `::selection` 用于制定用户使用鼠标高粱选择的文本样式。 通常用于改变选中文本的`background-color`。其只有少数属性可用，包括`color`,`background-color`,`cursor`,`text-decoration`
 
-### 属性选择器
+### 属性选择器 Attribute Selector
 
+属性选择器是根据HTML tag里面的属性，进行匹配，优先级与`.class`一致
 
+`[attr]` 匹配的元素拥有指定属性attr, 无论值是什么 `input[disabled]`
+`[attr="value"]` 匹配元素拥有指定attr， 且属性值等于指定的字符串值 `input[type="radio"]`
+`[attr^="value"]` 选择器匹配元素具有的指定attr，属性值的开头要匹配指定的值 `a[href^="https"]`
+`[attr$="value"]` 选择器匹配元素具有的指定attr，属性值的结尾要匹配指定的值 `a[href$=".pdf"]`
+`[attr*="value"]` 选择器匹配元素具有的指定attr，属性值中包含要匹配指定的值 `[class*="sprite-"]`
+`[attr~="value"]` 选择器匹配元素具有的指定attr，属性值中包含要匹配指定的值,并且属性值是一个空格分隔成的列表 `a[rel="author"]`
+`[attr|="value"]` 选择器匹配元素具有的指定attr，属性值等于指定的字符串值或者该字符串开头紧跟一个连字符，通常用于语言属性， `[lang|="es"]`
 
