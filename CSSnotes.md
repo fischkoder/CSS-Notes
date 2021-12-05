@@ -160,6 +160,59 @@ ul {
 ```
 root是一个伪类，等价于html selector。通常默认em对应的像素是16px。ul则直接通过root的font-size进行计算
 
+### 构造响应式面板
+
+我们可以通过媒体查询media query`@media`来取得当前屏幕的尺寸
+同时我们可以通过`@media`设定对应的样式
+``` css
+:root {
+    font-size: 0.75em;
+}
+
+@media (min-width: 800px) {
+    :root {
+        Font-size: 0.875em;
+    }
+}
+
+@media (min-width: 1200px) {
+    :root {
+        font-size: 1em;
+    }
+}
+```
+
+通过这种方式可以对于全局的字号进行控制
+
+#### 调整单个组件
+
+给某个组件的类进行修改
+`<div class="panel large">`
+这样可以先为所有的panel定义好内容
+``` css
+.panel {
+    font-size: 1rem;
+    padding: 1em;
+    border: 1pm solid #999;
+    border-radius: 0.5em;
+}
+
+.panel > h2 {
+    margin-top: 0;
+    font-size: 0.8em;
+    font-weight: bold;
+    text-transform: uppercase;
+}
+
+.panel.large {
+    font-size: 1.2rem;
+}
+```
+
+如此，`.panel.large`会覆盖掉一开始的panel的`font-size` 从而使得标记了对应类的元素具备单独放大显示的样式
+
+
+
 ## 附录 选择器 Selector
 
 ### 基础选择器：
