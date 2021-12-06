@@ -145,7 +145,7 @@ padding: 1em 2em 1em 2em
 
 如果使用值小于1的`em`连续继承，会造成字体逐层减小 `0.x * 0.x * 0.x ...`
 
-### rem定义字号
+#### rem定义字号
 
 `rem`的意思是root em，em参考值是相对于根元素的的值。无论在哪个位置使用rem，所取得的rem计算值都相同
 
@@ -211,6 +211,126 @@ root是一个伪类，等价于html selector。通常默认em对应的像素是1
 
 如此，`.panel.large`会覆盖掉一开始的panel的`font-size` 从而使得标记了对应类的元素具备单独放大显示的样式
 
+#### 可是区域的相对单位
+
+`vh`:窗口可视范围高度的1/100
+`vw`:窗口可视范围宽度的1/100
+`vmin`:窗口可视范围中宽与高较小一方的1/100
+`vmax`:窗口可视范围中宽与高较大一方的1/100
+
+这样可以通过`vmin`与`vmax`自动匹配设备的水平与垂直显示的变化
+
+``` css
+.square {
+    width: 90vmin;
+    height: 90vmin;
+    backgroud-color: #369;
+}
+```
+#### 使用vw定义字号
+
+可以利用`vw`的特性来自动匹配不同分辨率下的字号
+
+#### 使用calc()定义字号
+
+`calc()`函数可以对两个及以上的值进行基本运算。
+函数中可以进行常规的`➕`,`➖`,`✖️`,`➗`
+``` css
+:root {
+    font-size: calc(0.5em + 1vw);
+}
+```
+
+#### 无单位的数值与行高
+
+某些属性允许无单位数值，包括`line-height`,`z-index`,`font-weight`
+无单位的0只能用于长度和百分比，比如内边距，边框，宽度等，而不能用于角度值
+
+``` css
+body {
+    line-height: 1.2;
+}
+
+.about-us {
+    font-size: 2em;
+}
+```
+上述css描述中，行高设定了1.2，因为段落`.about-us`字号设定了2em,即`2em*16px`,后代单位集成了无单位的值，因此行高计算值就是`32px * 1.2`
+
+倘若行高没有使用无单位行高，例如`1.2em`会造成行高仅有19.2px，每行的字符会重叠
+
+### 自定义属性（CSS变量）
+
+``` css
+:root {
+    --main-font: Helvetica, Arial, sans-serif;
+}
+```
+变量前面通过`--`来表达声明，用于与css属性进行区分
+
+我们通过如下方式来使用变量
+``` css
+:root {
+    --main-font: Helvetica, Arial, sans-serif;
+    --brand-color: #369;
+}
+
+p {
+    font-family: var(--main-font);
+    color: var(--brand-color);
+}
+```
+同时，`var()`函数接受第二个参数，作为指定的备用值
+``` css
+:root {
+    --brand-color: #369;
+}
+
+p {
+    color: var(--secondary-color, blue);
+}
+```
+因为没有定义过`--secondary-color`这个变量，因此`var()`函数会直接读取第二个参数作为备用选项
+
+如果`var()`函数计算出来的值是一个非法值，对应的属性将被设置为其初始值
+
+#### 动态改变自定义属性
+自定义属性变量的核心在于可以层叠与继承，因此可以在多个选择器中定义相同的变量，这个变量在不同的位置可以有不同的值
+
+``` css
+:root {
+    --main-bg: #fff;
+    --main-color: #000;
+}
+
+.panel {
+    background-color: var(--main-bg);
+    color: var(--main-color);
+}
+
+.dark {
+    background-color: #999;
+    --main-bg: #333;
+    --main-color: #fff;
+}
+```
+以上的css样式套用在了两个panel中，第二个panel以class dark定义，在dark中，`--main-bg`,`--main-color`被重新定义，于是这个容器内的对应颜色被修改，其他地方还会是继承`:root`中所定义的内容
+
+#### 使用JavaScript改变自定义属性
+``` html
+<script type="text/javascript">
+    var rootElement = document.documentElement;
+    var styles = getComputedStyle(rootElement);
+    var mainColor = styles.getPropertyValue('--main-bg');
+    console.log(String(mainColor).trim());
+</script>
+```
+JavaScript 在浏览器中可以访问修改自定义属性
+``` javascript
+    var rootElement = document.documentElement;
+    rootElement.style.setProperty('--main-bg','#cdf');
+```
+## Chapter 3
 
 
 ## 附录 选择器 Selector
@@ -218,7 +338,8 @@ root是一个伪类，等价于html selector。通常默认em对应的像素是1
 ### 基础选择器：
 
 `tagname` 类型或者标签选择器，直接匹配标签名
-`.class` 类选择器匹配标签属性中的class名称
+`.class` 类选
+择器匹配标签属性中的class名称
 `#id` ID选择器，匹配标签属性中的id
 `*` 通用选择器，匹配所有元素
 
