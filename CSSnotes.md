@@ -2,7 +2,7 @@
 
 [toc]
 
-## Chapter 1
+## Chapter 1 层叠、优先级与继承
 
 ### 优先级理解
 
@@ -104,7 +104,7 @@ padding: 1em 2em 1em 2em
 ```
 即表达水平向右10px，垂直向下2px
 
-## Chapter 2
+## Chapter 2 相对单位
 
 ### em 与 rem
 
@@ -330,7 +330,117 @@ JavaScript 在浏览器中可以访问修改自定义属性
     var rootElement = document.documentElement;
     rootElement.style.setProperty('--main-bg','#cdf');
 ```
-## Chapter 3
+## Chapter 3 盒模型
+
+### 元素宽度的问题
+
+PS. IE浏览器不能正常渲染`<main>`为块级元素，需要增加`display:block`来修正这个bug
+
+在使用水平分列，分为两列时我们通常如下操作：
+``` html
+<div class="container">
+    <main class="main">
+        <p>say something</p>
+    </main>
+    <aside class="sidebar">
+        <div class="widget"></div>
+    </aside>
+</div>
+```
+``` css
+.main {
+    float: left;
+    width: 70%;
+    background-color: #fff;
+    border-radius: .5em;
+}
+
+.sidebar {
+    float: left;
+    width: 30%;
+    padding: 1.5em;
+    background-color: #fff;
+    border-radius: .5em;
+}
+```
+此处会发生一个问题，`<main>`与`<aside>`并没有并排，而是发生了换行
+
+因为`padding`导致了70%与30%的写法的元素实际宽度之和已经超出了100%
+
+这要引入一个核心概念 **盒模型**
+
+盒模型中包含四部分从外向内可以分为最外圈的**外边距margin**，之后向内是**边框border**，在向内是**内边距padding**，最后中心部分是**内容content**
+
+一个元素的`height`,`width`宽与高是包含了盒模型的**外边距**加**边框**加**内边距**加内容本身
+
+因此在案例中，1.5em的内边距`padding`，导致实际上是70%加上了3em再加30%，宽度超过100%，因此不能正确显示
+
+
+#### 避免魔术数值
+
+在修正上文中的错误时，有时候会用到反复测试到的结果，比如`.sidebar`的`width: 26%;`，这样的数值是一个魔术数值**magic number**，
+
+为避免使用魔术数值，我们在案例中发现实际上宽度可知超出了`3em`，那么可以通过使用`calc()`函数来减去这`3em`实现正常并排显示的目的
+
+#### 调整盒模型
+
+除了上文的方式，我们还可以利用调整`box-sizing`的方式，来改变盒模型的行为
+
+盒模型默认的`box-sizing`是`content-box`，就是指定参数只给到内容区域，不包含内边距、外边距和边框。
+如果将盒模型的行为变成`box-sizing: border-box`, 则包含了内容区域，内边距和边框，这样设定的30%是包含了这些内容的，避免了渲染错误
+所以除去采用上文的`calc()`方式以外，我们还可以采取`border-box`的参数设定，让元素之间的宽度总和等于100%
+
+#### 全局调整盒模型
+
+可以通过，如下方式全局设定所有元素与伪元素为`border-box`行为
+``` css
+*,
+::before,
+::after {
+    box-sizing: border-box;
+}
+```
+但是这样会带来一个问题，使用第三方css库的时候，可能会破坏其中某些布局，因此我们需要使用某些方式把第三方库的组件恢复成`content-box`
+
+``` css
+:root {
+    box-sizing: border-box;
+}
+
+*,
+::before,
+::after {
+    box-sizing: inherit; //盒模型不会被继承，所以需要inherit强制继承
+}
+
+.third-party-component {
+    box-sizing: content-box;
+}
+```
+上面`.third-party-component`是给第三方组件准备的类选择器，我们可以通过给第三方组件的顶级容器配置对应的类名，来恢复第三方css库的盒模型行为
+
+经过这样的了解后，对于将元素隔开，我们可以采用增加外边距的方式
+ps. 假设已经设定了`border-box`
+``` css
+.main {
+    float: left;
+    width: 70%;
+    background-color: #fff;
+    border-radius: .5em;
+}
+
+.sidebar {
+    float: left;
+    margin-left: 1%
+    width: 29%;
+    padding: 1.5em;
+    background-color: #fff;
+    border-radius: .5em;
+}
+```
+另外也可以采取用`calc()`的方式，减去`margin`的值也可
+
+### 元素的高度问题
 
 
 ## 附录 选择器 Selector
@@ -356,6 +466,20 @@ JavaScript 在浏览器中可以访问修改自定义属性
 例如：`p + h2`
 `通用兄弟组合器 ~` 匹配所有跟随在一个元素后面的元素 样式会应用到一个元素后面的所有元素
 例如：`li.active ~ li`
+
+这里解释一下 `ul li` 与 `ul > li`的区别
+``` html
+<ul>
+    <li></li>   <!--> 后代选择器与子组合选择器都会选中这个元素 <!-->
+    <li></li>   <!--> 后代选择器与子组合选择器都会选中这个元素 <!-->
+    <li></li>   <!--> 后代选择器与子组合选择器都会选中这个元素 <!-->
+    <ol>
+        <li></li> <!--> 只有后代选择器会选择这个元素 <!-->
+    </ol>
+</ul>
+```
+以上的区别主要是 子组合器`>`要求，其选择的后代必须是组合器左边元素的直接后代
+对于`ul > li`而言，只有前三行符合这个要求，而`<ol>`内部的不属于`<ul>`的直接后代
 
 ### 复合选择器 Compound Selectors
 指的是将多个选择器组合起来中间不采用任何组合器（空格 > + ~）进行连接
