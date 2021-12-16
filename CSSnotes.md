@@ -556,6 +556,36 @@ ps.除非必要，尽量不要给元素设定高度
     <a href="#" class="button-link"> like us on Facebook </a>
 </aside>
 ```
+``` css
+.button-link {
+    display: block;
+    padding: 0.5em;
+}
+```
+如果直接在`.button-link`的类里面加上`margin-top: 1.5em`, `siderbar`容器内的内边距与`.button-link`的外边距会造成额外的空白
+
+那么可以采用相邻兄弟选择器`+`的方式
+``` css
+.button-link + .button-link {
+    margin-top: 1.5em;
+}
+```
+这样最上方的`<a>`就没有额外的外边距影响布局了
+
+#### 猫头鹰选择器 owl selector
+
+当页面有大量连续堆叠的元素，采用`+`的方式使得代码重复难以扩展，那么可以在一个容器内给所有相邻的兄弟内容进行连续的外边距配置
+
+`* + *`，这个选择器中 `*`是通用选择器，可以匹配任何选中的元素，后面结合`+`选中相邻内容，其后面连着一个通用选择器`*`，这样可以实现内容的连续相邻选择，因形似猫头鹰而得名
+
+``` css
+body * + * {
+    margin-top: 1.5em;
+}
+```
+在本节案例中，猫头鹰选择器会造成一定副作用，因为`.sidebar`是`.main`的相邻元素，水平排列会使得其上面多一个额外的外边距，要在样式中给`.sidebar`设置一个`margin-top: 0`来清除样式
+
+## Chapter 4 理解浮动
 
 
 ## 附录 选择器 Selector
