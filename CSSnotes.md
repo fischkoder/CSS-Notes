@@ -587,6 +587,38 @@ body * + * {
 
 ## Chapter 4 理解浮动
 
+这里复习一下给全局sizing设定`border-box`的方法
+``` css
+:root {
+    box-sizing: border-box;
+}
+
+*,
+::before,
+::after {
+    box-sizing: inherit;
+}
+```
+通过伪类与伪元素进行全局适配
+
+当布局采用`<body>`内`<div>`做container的布局，称之为双容器模式`double container pattern`
+
+``` css
+.container {
+    max-width: 1080px;
+    margin: 0 auto;
+}
+```
+这里面设定内容器的最大宽度，同时设定了自动的左右`margin`让内部容器保持居中，同时`max-width`保证了一定的设备屏幕兼容性
+
+浮动实际上就是类似于word中**文字环绕**，让文字包围图片显示，以在网页中实现一定类似的逻辑，也因此浮动作为一种在flexbox出现之前的布局工具
+
+### 容器折叠和清除浮动
+
+#### 容器折叠
+
+
+
 
 ## 附录 选择器 Selector
 
