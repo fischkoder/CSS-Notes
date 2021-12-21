@@ -669,10 +669,68 @@ body * + * {
 
 #### BFC - Block formatting context 块级格式化上下文
 
+**BFC**是网页的一块区域，元素基于这个区域布局，BFC本身也是文档流的一部分，但是它可以将内部与外部的上下文隔开，因此不会与BFC外部的元素产生折叠
 
+*  BFC中包含了所有内部元素的上下外边距，他们不会跟BFC外面的元素产生外边距折叠
+*  BFC中包含了内部所有浮动元素
+*  BFC内部的浮动元素不与外面的浮动元素重叠
 
+给一个元素增加下列属性值就会创一个BFC
 
+* `float:left 或 right` 不为 `none`即可
+* `overflow: hidden 、auto 或 scroll` 不为 `visible`即可
+* `display: inline-block、table-cell、table-caption、flex、inline-flex、grid 或inline-grid` 拥有这些属性的元素称为块级容器**block container**
+* `position: absolute 或 position: fixed`
+* 另外网页的`root`元素创建了一个顶级的BFC
 
+### 网格系统
+
+大部分css框架包含自己的网格系统, 比如material-UI中可以通过attr傻瓜设定组件的宽度
+通常网格系统被划分为特定数量的列，一般是12个，也可以是其他数，每行子元素的宽度等于1-12个列的宽度
+
+|column1|column2|column3|column4|column5|column6|column7|column8|column9|column10|column11|column12|
+|:-----:|:-----:|:-----:|:-----:|:-----:|:-----:|:-----:|:-----:|:-----:|:------:|:------:|:------:|
+ 
+ 
+ 十二列使得页面可以轻易被2、3、4、6整除
+
+``` html
+<div class="row">
+    <div class="column-4">4 column</div>
+    <div class="column-8">8 column</div>
+</div>
+```
+代码中为每行创建了一个div容器，同时容器中按照占用的列创建了类名为`column-n`的元素
+
+对应的网格系统的css
+
+``` css
+.row::after {
+    content: " ";
+    display: block;
+    clear: both;
+}
+
+[class*="column-"] {
+    float: left;
+}
+
+.column-1 { width: 8.3333% }
+.column-2 { width: 16.6667% }
+.column-3 { width: 25% }
+.column-4 { width: 33.3333% }
+.column-5 { width: 41.6667% }
+.column-6 { width: 50% }
+.column-7 { width: 58.3333% }
+.column-8 { width: 66.6667% }
+.column-9 { width: 75% }
+.column-10 { width: 83.3333% }
+.column-11 { width: 91.6667% }
+.column-12 { width: 100% }
+```
+数值的百分比尽量计算的位数精确一些避免比例冲突
+
+## Chapter 5 Flexbox
 
 ## 附录 选择器 Selector
 
