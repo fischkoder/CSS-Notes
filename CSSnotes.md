@@ -732,6 +732,50 @@ body * + * {
 
 ## Chapter 5 Flexbox
 
+Flexbox全称Flexible Box Layout 弹性盒子布局
+
+通过`display: flex`来将一个元素变为弹性容器**flex container**，这个容器的子元素就变成了弹性元素**flex item**
+
+弹性元素默认是在同一行从左至右顺序排列，弹性容器可以像块元素一样填满整个可用宽度，但是弹性元素不一定。 弹性元素的高度彼此相等，大小由其内容所决定
+
+另外，`display: inline-flex`创建了一个类似于`inline-block`元素行为的弹性容器，他会跟其他行内元素一起流式排列，但是不会自动增长到100%宽度，容器内部元素跟使用`display: flex`内部的元素行为一致，实际应用中很少使用到`display: inline-flex`
+
+弹性容器中，x轴方向为主轴，y轴方向为副轴，分别由左至右，由上至下
+
+x、y轴的0点也称为起点，右、下也成为终点
+
+``` html
+<ul>
+    <li><a></a></li>
+    <li><a></a></li>
+    <li><a></a></li>
+    <li class="right"><a></a></li>
+</ul>
+```
+``` css
+ul {
+    display: flex;
+}
+
+ul > li > a {
+    display: block
+}
+```
+通过这个方式可以创造一个简单的水平方向的navbar结构，同时让链接成为一个块级元素，它可以撑开父级元素的高度
+
+如果想要把最后一个按钮推到水平最右
+``` css
+.right {
+    margin-left: auto;
+}
+```
+
+这样最后一个flex item会根据容器大小，让他的`margin-left`左外边距填充全部可用空间，这样最后一个按钮就会到navbar的最右，比如做about，login等
+
+### 设置Flex item的大小
+
+
+
 ## 附录 选择器 Selector
 
 ### 基础选择器：
